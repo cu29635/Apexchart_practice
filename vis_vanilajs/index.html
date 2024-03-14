@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>chart</title>
+    <link rel="stylesheet" href="styles.css?after">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.css">
+</head>
+<body>
+    <div id="wrapper">
+        <div class="content-area">
+          <div class="container-fluid">
+            <div class="main">
+              <div class="row1">
+                <div id="chart"></div>
+                <div class="slidecontainer">
+                  <input type="range" min="0" max="360" value="50" class="slider" id="slider_loc">
+              </div>
+              </div>
+              <div class="row2">
+                <div id="scatter"></div>
+              </div>
+              <!-- <div id="tableContainer"></div> -->
+              <div class = "container">
+                <div class = "col1"></div>
+                <div class = "col2">
+                  <div class = 'filter'>
+                    <p class="label">Low Frequency Filter</p>
+                    <div class = 'cheackbox-container'>
+                      <input type="checkbox" name = 'LowFrequency-filter' id="check1">
+                      <label for="check1"></label>
+                    </div>
+                  </div>
+                  <div class = 'filter'>
+                    <p class="label">PRE Filter</p>
+                    <div class = 'cheackbox-container'>
+                      <input type="checkbox" name = 'pre-filter' id ='check2'>
+                      <label for="check2"></label>
+                    </div>
+                  </div>
+                </div>
+                <div class = "col3">
+                  <div class = 'threshold'>
+                    <p class="label">Low Frequency Threshold : <span id="slider1Value">0</span> </p>
+                    
+                    <input type="range" min="0" max="100" value="0" class="minislider" id="slider1">
+                    
+                  </div>
+                  <div class = 'threshold'>
+                    <p class="label">PRE Threshold : <span id="slider2Value">0</span></p>
+                    
+                    <input type="range" min="0" max="100" value="0" class="minislider" id="slider2">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <script src="src/chart_slider.js"></script>
+    <script src="src/table.js"></script>
+    <script src="src/threshold_slider.js"></script>
+    <script src="src/checkbox.js"></script>
+    <script src="src/main_cart.js"></script>
+    <script src="src/scatter.js"></script>
+    
+</body>
+</html>
