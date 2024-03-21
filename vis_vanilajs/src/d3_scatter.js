@@ -1,46 +1,68 @@
-var loc = 50;
-function handleSliderChange(loc) {
-    // 차트 옵션 복제
-    var newOptions = JSON.parse(JSON.stringify(options));
-  
-    // Annotation 업데이트
-    newOptions.annotations.xaxis[0].x = loc-5;
-    newOptions.annotations.xaxis[0].x2 = loc+5;
-    newOptions.annotations.xaxis[1].x = loc;
-  
-    chart.updateOptions(newOptions);
+// 데이터 준비
+function generateData() {
+  const test_data = [];
+  // 1부터 20까지의 값을 갖는 ID 및 X_Value 생성
+  for (var i = 1; i <= 3600; i+=10) {
+    for (var j = 1; j <= 10; j++) {
+      if(i%20==1){
+        test_data.push({ X_Value : i, agentID: j , actionID :  Math.floor(Math.random() * 5)});
+      }
+      else {
+        test_data.push({ X_Value : i, agentID: j+0.3 , actionID :  Math.floor(Math.random() * 5)});
+      }
+      
+    }
   }
+  console.log( test_data[1]);
+  return test_data;
+}
 
-  //이거 쓰면 annotation이 넓어짐!!!
-  function handleSliderChangePoint(loc) {
-    // 차트 옵션 복제
-    var newOptions = JSON.parse(JSON.stringify(options));
-  
-    // Annotation 업데이트
-    newOptions.annotations.xaxis[0].x = loc;
-  
-    chart.updateOptions(newOptions);
-  }
-  
-  // 차트 업데이트 함수
-  function updateScatterChart(loc, data) {
-    // 이전 차트 요소 제거
-    // d3.select("#scatter-line-chart")
-    //   .attr("viewBox",null)
-    //   .remove();
-    svg.selectAll("*").remove();
-    // svg.attr("viewBox", null);
+// function dragstarted(d) {
+//   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+//   d.fx = d.x;
+//   d.fy = d.y;
+// }
 
-//     const svg = d3.select("#scatter-line-chart")
-//               .attr("width", width+margin.top)
-//               .attr("height",height)
-//               .attr("viewBox", "" + 28000/360*loc + " 0 900 840")
-//               .append("g")
-//               .attr("style", "max-width: 100%; height: auto;")
-//               .attr("transform",
-//  "translate(" + margin.left + "," + margin.top + ")");
+// function dragged(d) {
+//   d.fx = d3.event.x;
+//   d.fy = d3.event.y;
+// }
 
-svg.attr("viewBox",""+28000/360*loc+" -20 900 860" );
+// function dragended(d) {
+//   if (!d3.event.active) simulation.alphaTarget(0);
+//   d.fx = null;
+//   d.fy = null;
+// }
+
+
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 20, left: 50};
+
+const testdata = generateData();
+
+var width = 1800
+var height = 800
+
+// SVG 요소 생성
+const svg = d3.select("#scatter-line-chart")
+              .attr("width", width+margin.right+margin.left)
+              .attr("height",height+margin.top+margin.left)
+              .attr("style", "max-width: 100%; height: auto;")
+              .attr("transform",
+ "translate(" + margin.left + "," + margin.top + ")");
+
+
+svg.attr("viewBox",""+28000/360*50+" -20 900 860" );
+
+
+const zoom = d3.zoom()
+                .on('zoom', zoomed);
+svg.call(zoom);
+
+function zoomed() {
+  svg.attr('transform', d3.zoomTransform(this));
+}
 // 축의 범위 정의
 const xScale = d3.scaleLinear()
                .domain([0, d3.max(testdata, d=> d.X_Value)])
@@ -116,6 +138,9 @@ groupedData.forEach((group, agentID) => {
 });
 
 
+
+
+
  // 차트 그리기
  svg.selectAll("circle")
  .data(testdata)
@@ -147,67 +172,25 @@ svg.selectAll("rect-square")
  .style("stroke-width", 3); 
 
 
-}
-
-
-
-  // 슬라이더 이벤트 리스너 등록 - line chart
-  document.getElementById("slider_loc").addEventListener("input", function() {
-    svg.selectAll("rect.red-square").remove(); 
-
-    loc = parseInt(this.value); // 슬라이더의 값 가져오기
-    handleSliderChange(loc); // 슬라이더 값으로 Annotation 업데이트
-    // d3.select("#scatter-line-chart").remove();
-    svg.attr("viewBox",""+28000/360*loc+" -20 900 860" );
-    if(checkKey==1) makePRE(loc);
-  });
-
-  function slider_location() {
-    return parseInt(document.getElementById("slider_loc").value);
-}
 
 
 
 
 
+// const xOffset = 50; // x축으로 이동할 양
+// const width_view = 300; // viewBox의 너비
+// const height_view = 900; // viewBox의 높이
+// svg.attr("viewBox", `${xOffset} 0 ${width_view} ${height_view}`);
+// return svg.node();
 
-
-
-
-
-
-
-// 슬라이더 이동할때마다 사용 - scatter
-// function moveData(loc) {
-//     // 새로운 데이터를 선택하여 가져옴
-//     var newData = marlData.slice(loc-10,  loc+10);
-//      // yScale 업데이트
-//     yScale = d3.scaleLinear()
-//                 .domain([0, newData[0]+20])
-//                 .range([400, 0]);
-
-//     // y축 업데이트
-//     yAxis.transition().duration(1000).call(d3.axisLeft(yScale));
-
-//     // scatter plot 갱신
-//     svg.selectAll("circle")
-//        .data(newData)
-//        .attr("cy", d => yScale(d.y));
-
-//     // Line 그래프 갱신
-//     const line = d3.line()
-//                    .x(d => xScale(d.x))
-//                    .y(d => yScale(d.y));
-//     svg.selectAll("path")
-//        .datum(newData)
-//        .attr("d", line);
-//   }
-
-
-
-  // document.getElementById("slider_loc").addEventListener("input", function() {
-  //   var loc = parseInt(this.value); // 슬라이더의 값 가져오기
-  //   moveData(loc);
-  //   // changeScatter(loc); // 슬라이더 값으로 Annotation 업데이트
-  // });
+// d3.select("#slider_loc").on("input", function() {
+//   // 슬라이더의 현재 값 가져오기
+//   var sliderValue = +this.value;
   
+//   // viewbox 위치 조정
+//   var newX = sliderValue; // 새로운 viewbox x 위치 계산
+//   var newViewBox = [newX, 0, 1900, 800]; // 새로운 viewbox 배열 생성
+// console.log(newViewBox);
+//   // SVG 요소의 viewbox 업데이트
+//   svg.attr("viewBox", newViewBox.join(" "));
+// });

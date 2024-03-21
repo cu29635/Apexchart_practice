@@ -29,7 +29,7 @@ var options = {
       data: baselineData
     },
     {
-      name: "MARL",
+      name: "MaxRL",
       data: marlData
     }
   ],
@@ -43,25 +43,35 @@ var options = {
     }
   },
   xaxis: {
+    title: {
+      text : "Simulation time",
+      position: 'end',
+      offsetY: -50,
+      offsetX: 880,
+    },
     type : 'numeric', //매우 중요... x축 위치 찾는데
     min : 0,
     max : 360, 
+    tickAmount: 360,
     categories: Array.from({length: 361}, (_, index) => index),
     labels : {
-      show :false,
-      min : 0,
-      max : 360,
-    },
-    title: {
-      text : "Simulation time",
-      align: 'right',
-      offsetY: -10
+      show :true,
+      rotate: 0,
+      formatter: function (value, index) {
+        if (index % 50 == 0) {
+          return value; 
+        } else {
+          return ''; 
+        }
+      }
     }
+   
   },
   yaxis: [
     { 
       title: {
-        text : "Total Travel Time"
+        text : "Total Travel Time",
+        offsetX : 10
       },
       axisTicks: {
         show: true
@@ -105,7 +115,8 @@ var options = {
   },
   legend: {
     horizontalAlign: "left",
-    offsetY: -30
+    offsetY: -140,
+    offsetX: 5,
   },
   annotations: {
     xaxis : [
@@ -114,6 +125,8 @@ var options = {
         x2 : slider_location()+5,
         borderColor: '#000',
         fillColor: '#d3d3d3',
+      },
+      { x : slider_location(),
       }
     ]
   },
